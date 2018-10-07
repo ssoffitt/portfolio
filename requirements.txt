@@ -20,6 +20,7 @@ cryptography==2.2.2
 cupshelpers==1.0
 defer==1.0.6
 distro-info==0.18
+dj-database-url==0.5.0
 Django==1.11.15
 enum-compat==0.0.2
 feedparser==5.2.1
@@ -77,6 +78,7 @@ pyparsing==2.2.0
 pyRFC3339==1.0
 python-apt==1.6.2
 python-debian==0.1.32
+python-decouple==3.1
 pytz==2018.5
 pyxdg==0.25
 PyYAML==3.12
@@ -90,6 +92,7 @@ ssh-import-id==5.7
 stevedore==1.29.0
 system-service==0.3
 systemd-python==234
+testresources==2.0.1
 typed-ast==1.1.0
 ubuntu-drivers-common==0.0.0
 ufw==0.35
