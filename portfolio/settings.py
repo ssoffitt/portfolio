@@ -31,8 +31,7 @@ SECRET_KEY = config('SECRET_KEY')
 #DEBUG = True
 DEBUG=config('DJANGO_DEBUG')
 
-ALLOWED_HOSTS = [vast-shore-40928.herokuapp.com]
-
+ALLOWED_HOSTS = ['vast-shore-40928.herokuapp.com']
 
 # Application definition
 
