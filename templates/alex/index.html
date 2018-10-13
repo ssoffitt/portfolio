@@ -1,1 +1,68 @@
-Hello! My name is Alex
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"/>
+
+    <base href="/">
+
+    <!-- <link type="text/css" rel="stylesheet" href="vendors/mini-default.min.css"/>
+    <link type="text/css" rel="stylesheet" href="main.css"/> -->
+
+    <title>Main page</title>
+  </head>
+  <body>
+      <div>
+          <img alt="Logo"/>
+          <div class="navbar"></div>
+          <div>Обратная связь</div>
+          <div>alexbutvin@gmail.com</div>
+          <div>Skype: Alex</div>
+      </div>
+      <div>Cлайдер
+          <p>Ttile</p>
+          <button>Button</button>
+      </div>
+      <div>Работы
+          {% for item in attachments %}
+          <img width="40px" alt="{{ item.attachment.name }}" src="{{ item.attachment.url }}"/>
+          <img alt="work2"/>
+          <img alt="work3"/>
+          <img alt="work4"/>
+          {% endfor %}
+          <button>Смотреть все</button>
+      </div>
+      <div>Oбо мне
+          <div>
+              <div>Lorem ipsum...</div>
+              <div>Vidoe</div>
+              <div>Cвязаться со мной</div>
+            </div>
+          <div>Преимущества</div>
+      </div>
+      <div>Услуги
+          <div>block 1</div>
+          <div>block 2</div>
+          <div>block 3</div>
+          <div>block 4</div>
+      </div>
+      <div>Отзывы обо мне
+          <img alt="img1" />
+          <img alt="img2" />
+          <img alt="img3" />
+          <p>Читать все отзывы на fl.ru</p>
+          <p>Читать все отзывы на upwork</p>
+      </div>
+      <div>
+          Мои клиенты
+          <img alt="slider"/>
+      </div>
+      <div>Обратная связь (форма)
+          <input placeholder="email"/>
+          <textarea>message text</textarea>
+      </div>
+    <!-- <script src=""></script> -->
+  </body>
+  <footer></footer>
+</html>

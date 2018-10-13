@@ -1,5 +1,9 @@
 from django.shortcuts import render
+from .models import Attachments
 
 
 def index(request):
-    return render(request, 'alex/index.html')
+    images = Attachments.objects.all()
+    return render(request, 'alex/index.html', {
+        'attachments': images
+    })

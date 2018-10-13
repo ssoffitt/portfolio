@@ -31,7 +31,7 @@ SECRET_KEY = config('SECRET_KEY')
 #DEBUG = True
 DEBUG=config('DJANGO_DEBUG')
 
-ALLOWED_HOSTS = ['vast-shore-40928.herokuapp.com']
+ALLOWED_HOSTS = ['vast-shore-40928.herokuapp.com', 'localhost']
 
 # Application definition
 
@@ -126,6 +126,9 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
 STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Extra places for collectstatic to find static files.                         
 STATICFILES_DIRS = (                                                           

@@ -14,8 +14,25 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.views import static
+from django.conf import settings
 
 urlpatterns = [
+    url(r'^media/(.*)$', static.serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^alex/', include('alex.urls')),
+    #url(r'^alex/', include('alex.urls')),
+    url(r'', include('alex.urls')),
 ]
+
+if settings.DEBUG:
+    # Try to include debug_toolbar app.
+    try:
+        import debug_toolbar
+    except ImportError:
+        pass
+    else:
+        urlpatterns += [
+            url(r'^__debug__/', include(debug_toolbar.urls)),
+        ]
+
+
