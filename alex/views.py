@@ -1,5 +1,9 @@
-from django.shortcuts import render
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+
+from alex.forms import EmailForm
 from .models import Attachments
+from .tasks import send_email
 
 
 def index(request):
@@ -7,3 +11,12 @@ def index(request):
     return render(request, 'alex/index.html', {
         'attachments': images
     })
+
+
+def sending_email(request):
+    form_body = EmailForm(request.POST or None)
+    if form_body.is_valid():
+        data = form_body.cleaned_data
+        print(data['email'])
+        send_email(data['messages'], data['email'])
+    return redirect('alex-index')
