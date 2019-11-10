@@ -2,7 +2,7 @@
     "name": "jsapp",
     "version": "1.0.0",
     "description": "",
-    "main": "dist/app.js",
+    "main": "static/jsapp/app.js",
     "scripts": {
         "dev": "rollup -m --watch -c rollup.config.js",
         "test": "echo \"Error: no test specified\" && exit 1",
