@@ -6,7 +6,7 @@ services:
     restart: always
     volumes:
       - ./jsapp:/jsapp
-      - ./static:/jsapp/dist
+      # - ./static:/jsapp/static
     build:
       context: .
       dockerfile: npm.Dockerfile

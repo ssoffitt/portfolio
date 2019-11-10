@@ -20,3 +20,7 @@ def sending_email(request):
         print(data['email'])
         send_email(data['messages'], data['email'])
     return redirect('alex-index')
+
+
+def portfolio(request):
+    return render(request, 'alex/portfolio.html')
