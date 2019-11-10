@@ -270,6 +270,33 @@
 	arguments)},g.revokeObjectURL=function(a){u.revokeObjectURL(a);});a.URL=g;}})(window);Object.getOwnPropertyDescriptor(Node.prototype,"baseURI")||Object.defineProperty(Node.prototype,"baseURI",{get:function(){var a=(this.ownerDocument||this).querySelector("base[href]");return a&&a.href||window.location.href},configurable:!0,enumerable:!0});var dh=document.createElement("style");dh.textContent="body {transition: opacity ease-in 0.2s; } \nbody[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } \n";var eh=document.querySelector("head");eh.insertBefore(dh,eh.firstChild);var fh=window.customElements,gh=!1,hh=null;fh.polyfillWrapFlushCallback&&fh.polyfillWrapFlushCallback(function(a){hh=a;gh&&a();});function ih(){window.HTMLTemplateElement.bootstrap&&window.HTMLTemplateElement.bootstrap(window.document);hh&&hh();gh=!0;window.WebComponents.ready=!0;document.dispatchEvent(new CustomEvent("WebComponentsReady",{bubbles:!0}));}
 	"complete"!==document.readyState?(window.addEventListener("load",ih),window.addEventListener("DOMContentLoaded",function(){window.removeEventListener("load",ih);ih();})):ih();}).call(commonjsGlobal);
 
+	var scrollToAnchor_1 = scrollToAnchor;
+
+	function scrollToAnchor (anchor, options) {
+	  if (anchor) {
+	    try {
+	      var el = document.querySelector(anchor);
+	      if (el) el.scrollIntoView(options);
+	    } catch (e) {}
+	  }
+	}
+
+	var documentReady = ready;
+
+	function ready (callback) {
+	  if (typeof document === 'undefined') {
+	    throw new Error('document-ready only runs in the browser')
+	  }
+	  var state = document.readyState;
+	  if (state === 'complete' || state === 'interactive') {
+	    return setTimeout(callback, 0)
+	  }
+
+	  document.addEventListener('DOMContentLoaded', function onLoad () {
+	    callback();
+	  });
+	}
+
 	var global$1 = (typeof global !== "undefined" ? global :
 	            typeof self !== "undefined" ? self :
 	            typeof window !== "undefined" ? window : {});
@@ -3219,6 +3246,8 @@
 	  nanotiming.disabled = window.localStorage.DISABLE_NANOTIMING === 'true' || !perf.mark;
 	} catch (e) { }
 
+	var browser = nanotiming;
+
 	function nanotiming (name) {
 	  assert$2.equal(typeof name, 'string', 'nanotiming: name should be type string');
 
@@ -3256,12 +3285,966 @@
 	  }
 	}
 
+	var mutable = extend;
+
+	var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
+
+	function extend(target) {
+	    for (var i = 1; i < arguments.length; i++) {
+	        var source = arguments[i];
+
+	        for (var key in source) {
+	            if (hasOwnProperty$1.call(source, key)) {
+	                target[key] = source[key];
+	            }
+	        }
+	    }
+
+	    return target
+	}
+
+	var immutable = extend$1;
+
+	var hasOwnProperty$2 = Object.prototype.hasOwnProperty;
+
+	function extend$1() {
+	    var target = {};
+
+	    for (var i = 0; i < arguments.length; i++) {
+	        var source = arguments[i];
+
+	        for (var key in source) {
+	            if (hasOwnProperty$2.call(source, key)) {
+	                target[key] = source[key];
+	            }
+	        }
+	    }
+
+	    return target
+	}
+
+	var trie = Trie;
+
+	// create a new trie
+	// null -> obj
+	function Trie () {
+	  if (!(this instanceof Trie)) return new Trie()
+	  this.trie = { nodes: {} };
+	}
+
+	// create a node on the trie at route
+	// and return a node
+	// str -> null
+	Trie.prototype.create = function (route) {
+	  assert$2.equal(typeof route, 'string', 'route should be a string');
+	  // strip leading '/' and split routes
+	  var routes = route.replace(/^\//, '').split('/');
+
+	  function createNode (index, trie) {
+	    var thisRoute = (routes.hasOwnProperty(index) && routes[index]);
+	    if (thisRoute === false) return trie
+
+	    var node = null;
+	    if (/^:|^\*/.test(thisRoute)) {
+	      // if node is a name match, set name and append to ':' node
+	      if (!trie.nodes.hasOwnProperty('$$')) {
+	        node = { nodes: {} };
+	        trie.nodes['$$'] = node;
+	      } else {
+	        node = trie.nodes['$$'];
+	      }
+
+	      if (thisRoute[0] === '*') {
+	        trie.wildcard = true;
+	      }
+
+	      trie.name = thisRoute.replace(/^:|^\*/, '');
+	    } else if (!trie.nodes.hasOwnProperty(thisRoute)) {
+	      node = { nodes: {} };
+	      trie.nodes[thisRoute] = node;
+	    } else {
+	      node = trie.nodes[thisRoute];
+	    }
+
+	    // we must recurse deeper
+	    return createNode(index + 1, node)
+	  }
+
+	  return createNode(0, this.trie)
+	};
+
+	// match a route on the trie
+	// and return the node
+	// str -> obj
+	Trie.prototype.match = function (route) {
+	  assert$2.equal(typeof route, 'string', 'route should be a string');
+
+	  var routes = route.replace(/^\//, '').split('/');
+	  var params = {};
+
+	  function search (index, trie) {
+	    // either there's no match, or we're done searching
+	    if (trie === undefined) return undefined
+	    var thisRoute = routes[index];
+	    if (thisRoute === undefined) return trie
+
+	    if (trie.nodes.hasOwnProperty(thisRoute)) {
+	      // match regular routes first
+	      return search(index + 1, trie.nodes[thisRoute])
+	    } else if (trie.name) {
+	      // match named routes
+	      try {
+	        params[trie.name] = decodeURIComponent(thisRoute);
+	      } catch (e) {
+	        return search(index, undefined)
+	      }
+	      return search(index + 1, trie.nodes['$$'])
+	    } else if (trie.wildcard) {
+	      // match wildcards
+	      try {
+	        params['wildcard'] = decodeURIComponent(routes.slice(index).join('/'));
+	      } catch (e) {
+	        return search(index, undefined)
+	      }
+	      // return early, or else search may keep recursing through the wildcard
+	      return trie.nodes['$$']
+	    } else {
+	      // no matches found
+	      return search(index + 1)
+	    }
+	  }
+
+	  var node = search(0, this.trie);
+
+	  if (!node) return undefined
+	  node = immutable(node);
+	  node.params = params;
+	  return node
+	};
+
+	// mount a trie onto a node at route
+	// (str, obj) -> null
+	Trie.prototype.mount = function (route, trie) {
+	  assert$2.equal(typeof route, 'string', 'route should be a string');
+	  assert$2.equal(typeof trie, 'object', 'trie should be a object');
+
+	  var split = route.replace(/^\//, '').split('/');
+	  var node = null;
+	  var key = null;
+
+	  if (split.length === 1) {
+	    key = split[0];
+	    node = this.create(key);
+	  } else {
+	    var head = split.join('/');
+	    key = split[0];
+	    node = this.create(head);
+	  }
+
+	  mutable(node.nodes, trie.nodes);
+	  if (trie.name) node.name = trie.name;
+
+	  // delegate properties from '/' to the new node
+	  // '/' cannot be reached once mounted
+	  if (node.nodes['']) {
+	    Object.keys(node.nodes['']).forEach(function (key) {
+	      if (key === 'nodes') return
+	      node[key] = node.nodes[''][key];
+	    });
+	    mutable(node.nodes, node.nodes[''].nodes);
+	    delete node.nodes[''].nodes;
+	  }
+	};
+
+	var wayfarer = Wayfarer;
+
+	// create a router
+	// str -> obj
+	function Wayfarer (dft) {
+	  if (!(this instanceof Wayfarer)) return new Wayfarer(dft)
+
+	  var _default = (dft || '').replace(/^\//, '');
+	  var _trie = trie();
+
+	  emit._trie = _trie;
+	  emit.on = on;
+	  emit.emit = emit;
+	  emit.match = match;
+	  emit._wayfarer = true;
+
+	  return emit
+
+	  // define a route
+	  // (str, fn) -> obj
+	  function on (route, fn) {
+	    assert$2.equal(typeof route, 'string');
+	    assert$2.equal(typeof fn, 'function');
+
+	    var cb = fn._wayfarer && fn._trie ? fn : proxy;
+	    route = route || '/';
+	    cb.route = route;
+
+	    if (cb._wayfarer && cb._trie) {
+	      _trie.mount(route, cb._trie.trie);
+	    } else {
+	      var node = _trie.create(route);
+	      node.cb = cb;
+	    }
+
+	    return emit
+
+	    function proxy () {
+	      return fn.apply(this, Array.prototype.slice.call(arguments))
+	    }
+	  }
+
+	  // match and call a route
+	  // (str, obj?) -> null
+	  function emit (route) {
+	    var matched = match(route);
+
+	    var args = new Array(arguments.length);
+	    args[0] = matched.params;
+	    for (var i = 1; i < args.length; i++) {
+	      args[i] = arguments[i];
+	    }
+
+	    return matched.cb.apply(matched.cb, args)
+	  }
+
+	  function match (route) {
+	    assert$2.notEqual(route, undefined, "'route' must be defined");
+
+	    var matched = _trie.match(route);
+	    if (matched && matched.cb) return new Route(matched)
+
+	    var dft = _trie.match(_default);
+	    if (dft && dft.cb) return new Route(dft)
+
+	    throw new Error("route '" + route + "' did not match")
+	  }
+
+	  function Route (matched) {
+	    this.cb = matched.cb;
+	    this.route = matched.cb.route;
+	    this.params = matched.params;
+	  }
+	}
+
 	// electron support
 	var isLocalFile = (/file:\/\//.test(
 	  typeof window === 'object' &&
 	  window.location &&
 	  window.location.origin
 	));
+
+	/* eslint-disable no-useless-escape */
+	var electron = '^(file:\/\/|\/)(.*\.html?\/?)?';
+	var protocol = '^(http(s)?(:\/\/))?(www\.)?';
+	var domain = '[a-zA-Z0-9-_\.]+(:[0-9]{1,5})?(\/{1})?';
+	var qs = '[\?].*$';
+	/* eslint-enable no-useless-escape */
+
+	var stripElectron = new RegExp(electron);
+	var prefix = new RegExp(protocol + domain);
+	var normalize = new RegExp('#');
+	var suffix = new RegExp(qs);
+
+	var nanorouter = Nanorouter;
+
+	function Nanorouter (opts) {
+	  if (!(this instanceof Nanorouter)) return new Nanorouter(opts)
+	  opts = opts || {};
+	  this.router = wayfarer(opts.default || '/404');
+	}
+
+	Nanorouter.prototype.on = function (routename, listener) {
+	  assert$2.equal(typeof routename, 'string');
+	  routename = routename.replace(/^[#/]/, '');
+	  this.router.on(routename, listener);
+	};
+
+	Nanorouter.prototype.emit = function (routename) {
+	  assert$2.equal(typeof routename, 'string');
+	  routename = pathname(routename, isLocalFile);
+	  return this.router.emit(routename)
+	};
+
+	Nanorouter.prototype.match = function (routename) {
+	  assert$2.equal(typeof routename, 'string');
+	  routename = pathname(routename, isLocalFile);
+	  return this.router.match(routename)
+	};
+
+	// replace everything in a route but the pathname and hash
+	function pathname (routename, isElectron) {
+	  if (isElectron) routename = routename.replace(stripElectron, '');
+	  else routename = routename.replace(prefix, '');
+	  return decodeURI(routename.replace(suffix, '').replace(normalize, '/'))
+	}
+
+	assert$3.notEqual = notEqual$1;
+	assert$3.notOk = notOk;
+	assert$3.equal = equal$1;
+	assert$3.ok = assert$3;
+
+	var nanoassert = assert$3;
+
+	function equal$1 (a, b, m) {
+	  assert$3(a == b, m); // eslint-disable-line eqeqeq
+	}
+
+	function notEqual$1 (a, b, m) {
+	  assert$3(a != b, m); // eslint-disable-line eqeqeq
+	}
+
+	function notOk (t, m) {
+	  assert$3(!t, m);
+	}
+
+	function assert$3 (t, m) {
+	  if (!t) throw new Error(m || 'AssertionError')
+	}
+
+	var events = [
+	  // attribute events (can be set with attributes)
+	  'onclick',
+	  'ondblclick',
+	  'onmousedown',
+	  'onmouseup',
+	  'onmouseover',
+	  'onmousemove',
+	  'onmouseout',
+	  'onmouseenter',
+	  'onmouseleave',
+	  'ontouchcancel',
+	  'ontouchend',
+	  'ontouchmove',
+	  'ontouchstart',
+	  'ondragstart',
+	  'ondrag',
+	  'ondragenter',
+	  'ondragleave',
+	  'ondragover',
+	  'ondrop',
+	  'ondragend',
+	  'onkeydown',
+	  'onkeypress',
+	  'onkeyup',
+	  'onunload',
+	  'onabort',
+	  'onerror',
+	  'onresize',
+	  'onscroll',
+	  'onselect',
+	  'onchange',
+	  'onsubmit',
+	  'onreset',
+	  'onfocus',
+	  'onblur',
+	  'oninput',
+	  // other common events
+	  'oncontextmenu',
+	  'onfocusin',
+	  'onfocusout'
+	];
+
+	var eventsLength = events.length;
+
+	var ELEMENT_NODE = 1;
+	var TEXT_NODE = 3;
+	var COMMENT_NODE = 8;
+
+	var morph_1 = morph;
+
+	// diff elements and apply the resulting patch to the old node
+	// (obj, obj) -> null
+	function morph (newNode, oldNode) {
+	  var nodeType = newNode.nodeType;
+	  var nodeName = newNode.nodeName;
+
+	  if (nodeType === ELEMENT_NODE) {
+	    copyAttrs(newNode, oldNode);
+	  }
+
+	  if (nodeType === TEXT_NODE || nodeType === COMMENT_NODE) {
+	    if (oldNode.nodeValue !== newNode.nodeValue) {
+	      oldNode.nodeValue = newNode.nodeValue;
+	    }
+	  }
+
+	  // Some DOM nodes are weird
+	  // https://github.com/patrick-steele-idem/morphdom/blob/master/src/specialElHandlers.js
+	  if (nodeName === 'INPUT') updateInput(newNode, oldNode);
+	  else if (nodeName === 'OPTION') updateOption(newNode, oldNode);
+	  else if (nodeName === 'TEXTAREA') updateTextarea(newNode, oldNode);
+
+	  copyEvents(newNode, oldNode);
+	}
+
+	function copyAttrs (newNode, oldNode) {
+	  var oldAttrs = oldNode.attributes;
+	  var newAttrs = newNode.attributes;
+	  var attrNamespaceURI = null;
+	  var attrValue = null;
+	  var fromValue = null;
+	  var attrName = null;
+	  var attr = null;
+
+	  for (var i = newAttrs.length - 1; i >= 0; --i) {
+	    attr = newAttrs[i];
+	    attrName = attr.name;
+	    attrNamespaceURI = attr.namespaceURI;
+	    attrValue = attr.value;
+	    if (attrNamespaceURI) {
+	      attrName = attr.localName || attrName;
+	      fromValue = oldNode.getAttributeNS(attrNamespaceURI, attrName);
+	      if (fromValue !== attrValue) {
+	        oldNode.setAttributeNS(attrNamespaceURI, attrName, attrValue);
+	      }
+	    } else {
+	      if (!oldNode.hasAttribute(attrName)) {
+	        oldNode.setAttribute(attrName, attrValue);
+	      } else {
+	        fromValue = oldNode.getAttribute(attrName);
+	        if (fromValue !== attrValue) {
+	          // apparently values are always cast to strings, ah well
+	          if (attrValue === 'null' || attrValue === 'undefined') {
+	            oldNode.removeAttribute(attrName);
+	          } else {
+	            oldNode.setAttribute(attrName, attrValue);
+	          }
+	        }
+	      }
+	    }
+	  }
+
+	  // Remove any extra attributes found on the original DOM element that
+	  // weren't found on the target element.
+	  for (var j = oldAttrs.length - 1; j >= 0; --j) {
+	    attr = oldAttrs[j];
+	    if (attr.specified !== false) {
+	      attrName = attr.name;
+	      attrNamespaceURI = attr.namespaceURI;
+
+	      if (attrNamespaceURI) {
+	        attrName = attr.localName || attrName;
+	        if (!newNode.hasAttributeNS(attrNamespaceURI, attrName)) {
+	          oldNode.removeAttributeNS(attrNamespaceURI, attrName);
+	        }
+	      } else {
+	        if (!newNode.hasAttributeNS(null, attrName)) {
+	          oldNode.removeAttribute(attrName);
+	        }
+	      }
+	    }
+	  }
+	}
+
+	function copyEvents (newNode, oldNode) {
+	  for (var i = 0; i < eventsLength; i++) {
+	    var ev = events[i];
+	    if (newNode[ev]) {           // if new element has a whitelisted attribute
+	      oldNode[ev] = newNode[ev];  // update existing element
+	    } else if (oldNode[ev]) {    // if existing element has it and new one doesnt
+	      oldNode[ev] = undefined;    // remove it from existing element
+	    }
+	  }
+	}
+
+	function updateOption (newNode, oldNode) {
+	  updateAttribute(newNode, oldNode, 'selected');
+	}
+
+	// The "value" attribute is special for the <input> element since it sets the
+	// initial value. Changing the "value" attribute without changing the "value"
+	// property will have no effect since it is only used to the set the initial
+	// value. Similar for the "checked" attribute, and "disabled".
+	function updateInput (newNode, oldNode) {
+	  var newValue = newNode.value;
+	  var oldValue = oldNode.value;
+
+	  updateAttribute(newNode, oldNode, 'checked');
+	  updateAttribute(newNode, oldNode, 'disabled');
+
+	  if (newValue !== oldValue) {
+	    oldNode.setAttribute('value', newValue);
+	    oldNode.value = newValue;
+	  }
+
+	  if (newValue === 'null') {
+	    oldNode.value = '';
+	    oldNode.removeAttribute('value');
+	  }
+
+	  if (!newNode.hasAttributeNS(null, 'value')) {
+	    oldNode.removeAttribute('value');
+	  } else if (oldNode.type === 'range') {
+	    // this is so elements like slider move their UI thingy
+	    oldNode.value = newValue;
+	  }
+	}
+
+	function updateTextarea (newNode, oldNode) {
+	  var newValue = newNode.value;
+	  if (newValue !== oldNode.value) {
+	    oldNode.value = newValue;
+	  }
+
+	  if (oldNode.firstChild && oldNode.firstChild.nodeValue !== newValue) {
+	    // Needed for IE. Apparently IE sets the placeholder as the
+	    // node value and vise versa. This ignores an empty update.
+	    if (newValue === '' && oldNode.firstChild.nodeValue === oldNode.placeholder) {
+	      return
+	    }
+
+	    oldNode.firstChild.nodeValue = newValue;
+	  }
+	}
+
+	function updateAttribute (newNode, oldNode, name) {
+	  if (newNode[name] !== oldNode[name]) {
+	    oldNode[name] = newNode[name];
+	    if (newNode[name]) {
+	      oldNode.setAttribute(name, '');
+	    } else {
+	      oldNode.removeAttribute(name);
+	    }
+	  }
+	}
+
+	var TEXT_NODE$1 = 3;
+	// var DEBUG = false
+
+	var nanomorph_1 = nanomorph;
+
+	// Morph one tree into another tree
+	//
+	// no parent
+	//   -> same: diff and walk children
+	//   -> not same: replace and return
+	// old node doesn't exist
+	//   -> insert new node
+	// new node doesn't exist
+	//   -> delete old node
+	// nodes are not the same
+	//   -> diff nodes and apply patch to old node
+	// nodes are the same
+	//   -> walk all child nodes and append to old node
+	function nanomorph (oldTree, newTree, options) {
+	  // if (DEBUG) {
+	  //   console.log(
+	  //   'nanomorph\nold\n  %s\nnew\n  %s',
+	  //   oldTree && oldTree.outerHTML,
+	  //   newTree && newTree.outerHTML
+	  // )
+	  // }
+	  nanoassert.equal(typeof oldTree, 'object', 'nanomorph: oldTree should be an object');
+	  nanoassert.equal(typeof newTree, 'object', 'nanomorph: newTree should be an object');
+	  nanoassert.notEqual(
+	    newTree.nodeType,
+	    11,
+	    'nanomorph: newTree should have one root node (which is not a DocumentFragment)'
+	  );
+
+	  if (options && options.childrenOnly) {
+	    updateChildren(newTree, oldTree);
+	    return oldTree
+	  }
+
+	  return walk(newTree, oldTree)
+	}
+
+	// Walk and morph a dom tree
+	function walk (newNode, oldNode) {
+	  // if (DEBUG) {
+	  //   console.log(
+	  //   'walk\nold\n  %s\nnew\n  %s',
+	  //   oldNode && oldNode.outerHTML,
+	  //   newNode && newNode.outerHTML
+	  // )
+	  // }
+	  if (!oldNode) {
+	    return newNode
+	  } else if (!newNode) {
+	    return null
+	  } else if (newNode.isSameNode && newNode.isSameNode(oldNode)) {
+	    return oldNode
+	  } else if (newNode.tagName !== oldNode.tagName) {
+	    return newNode
+	  } else {
+	    morph_1(newNode, oldNode);
+	    updateChildren(newNode, oldNode);
+	    return oldNode
+	  }
+	}
+
+	// Update the children of elements
+	// (obj, obj) -> null
+	function updateChildren (newNode, oldNode) {
+	  // if (DEBUG) {
+	  //   console.log(
+	  //   'updateChildren\nold\n  %s\nnew\n  %s',
+	  //   oldNode && oldNode.outerHTML,
+	  //   newNode && newNode.outerHTML
+	  // )
+	  // }
+	  var oldChild, newChild, morphed, oldMatch;
+
+	  // The offset is only ever increased, and used for [i - offset] in the loop
+	  var offset = 0;
+
+	  for (var i = 0; ; i++) {
+	    oldChild = oldNode.childNodes[i];
+	    newChild = newNode.childNodes[i - offset];
+	    // if (DEBUG) {
+	    //   console.log(
+	    //   '===\n- old\n  %s\n- new\n  %s',
+	    //   oldChild && oldChild.outerHTML,
+	    //   newChild && newChild.outerHTML
+	    // )
+	    // }
+	    // Both nodes are empty, do nothing
+	    if (!oldChild && !newChild) {
+	      break
+
+	    // There is no new child, remove old
+	    } else if (!newChild) {
+	      oldNode.removeChild(oldChild);
+	      i--;
+
+	    // There is no old child, add new
+	    } else if (!oldChild) {
+	      oldNode.appendChild(newChild);
+	      offset++;
+
+	    // Both nodes are the same, morph
+	    } else if (same(newChild, oldChild)) {
+	      morphed = walk(newChild, oldChild);
+	      if (morphed !== oldChild) {
+	        oldNode.replaceChild(morphed, oldChild);
+	        offset++;
+	      }
+
+	    // Both nodes do not share an ID or a placeholder, try reorder
+	    } else {
+	      oldMatch = null;
+
+	      // Try and find a similar node somewhere in the tree
+	      for (var j = i; j < oldNode.childNodes.length; j++) {
+	        if (same(oldNode.childNodes[j], newChild)) {
+	          oldMatch = oldNode.childNodes[j];
+	          break
+	        }
+	      }
+
+	      // If there was a node with the same ID or placeholder in the old list
+	      if (oldMatch) {
+	        morphed = walk(newChild, oldMatch);
+	        if (morphed !== oldMatch) offset++;
+	        oldNode.insertBefore(morphed, oldChild);
+
+	      // It's safe to morph two nodes in-place if neither has an ID
+	      } else if (!newChild.id && !oldChild.id) {
+	        morphed = walk(newChild, oldChild);
+	        if (morphed !== oldChild) {
+	          oldNode.replaceChild(morphed, oldChild);
+	          offset++;
+	        }
+
+	      // Insert the node at the index if we couldn't morph or find a matching node
+	      } else {
+	        oldNode.insertBefore(newChild, oldChild);
+	        offset++;
+	      }
+	    }
+	  }
+	}
+
+	function same (a, b) {
+	  if (a.id) return a.id === b.id
+	  if (a.isSameNode) return a.isSameNode(b)
+	  if (a.tagName !== b.tagName) return false
+	  if (a.type === TEXT_NODE$1) return a.nodeValue === b.nodeValue
+	  return false
+	}
+
+	var reg = /([^?=&]+)(=([^&]*))?/g;
+
+
+	var browser$1 = qs$1;
+
+	function qs$1 (url) {
+	  assert$2.equal(typeof url, 'string', 'nanoquery: url should be type string');
+
+	  var obj = {};
+	  url.replace(/^.*\?/, '').replace(reg, function (a0, a1, a2, a3) {
+	    obj[decodeURIComponent(a1)] = decodeURIComponent(a3);
+	  });
+
+	  return obj
+	}
+
+	var safeExternalLink = /(noopener|noreferrer) (noopener|noreferrer)/;
+	var protocolLink = /^[\w-_]+:/;
+
+	var nanohref = href;
+
+	function href (cb, root) {
+	  assert$2.notEqual(typeof window, 'undefined', 'nanohref: expected window to exist');
+
+	  root = root || window.document;
+
+	  assert$2.equal(typeof cb, 'function', 'nanohref: cb should be type function');
+	  assert$2.equal(typeof root, 'object', 'nanohref: root should be type object');
+
+	  window.addEventListener('click', function (e) {
+	    if ((e.button && e.button !== 0) ||
+	      e.ctrlKey || e.metaKey || e.altKey || e.shiftKey ||
+	      e.defaultPrevented) return
+
+	    var anchor = (function traverse (node) {
+	      if (!node || node === root) return
+	      if (node.localName !== 'a' || node.href === undefined) {
+	        return traverse(node.parentNode)
+	      }
+	      return node
+	    })(e.target);
+
+	    if (!anchor) return
+
+	    if (window.location.protocol !== anchor.protocol ||
+	        window.location.hostname !== anchor.hostname ||
+	        window.location.port !== anchor.port ||
+	      anchor.hasAttribute('data-nanohref-ignore') ||
+	      anchor.hasAttribute('download') ||
+	      (anchor.getAttribute('target') === '_blank' &&
+	        safeExternalLink.test(anchor.getAttribute('rel'))) ||
+	      protocolLink.test(anchor.getAttribute('href'))) return
+
+	    e.preventDefault();
+	    cb(anchor);
+	  });
+	}
+
+	var nanoraf_1 = nanoraf;
+
+	// Only call RAF when needed
+	// (fn, fn?) -> fn
+	function nanoraf (render, raf) {
+	  assert$2.equal(typeof render, 'function', 'nanoraf: render should be a function');
+	  assert$2.ok(typeof raf === 'function' || typeof raf === 'undefined', 'nanoraf: raf should be a function or undefined');
+
+	  if (!raf) raf = window.requestAnimationFrame;
+	  var redrawScheduled = false;
+	  var args = null;
+
+	  return function frame () {
+	    if (args === null && !redrawScheduled) {
+	      redrawScheduled = true;
+
+	      raf(function redraw () {
+	        redrawScheduled = false;
+
+	        var length = args.length;
+	        var _args = new Array(length);
+	        for (var i = 0; i < length; i++) _args[i] = args[i];
+
+	        render.apply(render, _args);
+	        args = null;
+	      });
+	    }
+
+	    args = arguments;
+	  }
+	}
+
+	/**
+	 * Remove a range of items from an array
+	 *
+	 * @function removeItems
+	 * @param {Array<*>} arr The target array
+	 * @param {number} startIdx The index to begin removing from (inclusive)
+	 * @param {number} removeCount How many items to remove
+	 */
+	var removeArrayItems = function removeItems (arr, startIdx, removeCount) {
+	  var i, length = arr.length;
+
+	  if (startIdx >= length || removeCount === 0) {
+	    return
+	  }
+
+	  removeCount = (startIdx + removeCount > length ? length - startIdx : removeCount);
+
+	  var len = length - removeCount;
+
+	  for (i = startIdx; i < len; ++i) {
+	    arr[i] = arr[i + removeCount];
+	  }
+
+	  arr.length = len;
+	};
+
+	var nanobus = Nanobus;
+
+	function Nanobus (name) {
+	  if (!(this instanceof Nanobus)) return new Nanobus(name)
+
+	  this._name = name || 'nanobus';
+	  this._starListeners = [];
+	  this._listeners = {};
+	}
+
+	Nanobus.prototype.emit = function (eventName) {
+	  assert$2.ok(typeof eventName === 'string' || typeof eventName === 'symbol', 'nanobus.emit: eventName should be type string or symbol');
+
+	  var data = [];
+	  for (var i = 1, len = arguments.length; i < len; i++) {
+	    data.push(arguments[i]);
+	  }
+
+	  var emitTiming = browser(this._name + "('" + eventName.toString() + "')");
+	  var listeners = this._listeners[eventName];
+	  if (listeners && listeners.length > 0) {
+	    this._emit(this._listeners[eventName], data);
+	  }
+
+	  if (this._starListeners.length > 0) {
+	    this._emit(this._starListeners, eventName, data, emitTiming.uuid);
+	  }
+	  emitTiming();
+
+	  return this
+	};
+
+	Nanobus.prototype.on = Nanobus.prototype.addListener = function (eventName, listener) {
+	  assert$2.ok(typeof eventName === 'string' || typeof eventName === 'symbol', 'nanobus.on: eventName should be type string or symbol');
+	  assert$2.equal(typeof listener, 'function', 'nanobus.on: listener should be type function');
+
+	  if (eventName === '*') {
+	    this._starListeners.push(listener);
+	  } else {
+	    if (!this._listeners[eventName]) this._listeners[eventName] = [];
+	    this._listeners[eventName].push(listener);
+	  }
+	  return this
+	};
+
+	Nanobus.prototype.prependListener = function (eventName, listener) {
+	  assert$2.ok(typeof eventName === 'string' || typeof eventName === 'symbol', 'nanobus.prependListener: eventName should be type string or symbol');
+	  assert$2.equal(typeof listener, 'function', 'nanobus.prependListener: listener should be type function');
+
+	  if (eventName === '*') {
+	    this._starListeners.unshift(listener);
+	  } else {
+	    if (!this._listeners[eventName]) this._listeners[eventName] = [];
+	    this._listeners[eventName].unshift(listener);
+	  }
+	  return this
+	};
+
+	Nanobus.prototype.once = function (eventName, listener) {
+	  assert$2.ok(typeof eventName === 'string' || typeof eventName === 'symbol', 'nanobus.once: eventName should be type string or symbol');
+	  assert$2.equal(typeof listener, 'function', 'nanobus.once: listener should be type function');
+
+	  var self = this;
+	  this.on(eventName, once);
+	  function once () {
+	    listener.apply(self, arguments);
+	    self.removeListener(eventName, once);
+	  }
+	  return this
+	};
+
+	Nanobus.prototype.prependOnceListener = function (eventName, listener) {
+	  assert$2.ok(typeof eventName === 'string' || typeof eventName === 'symbol', 'nanobus.prependOnceListener: eventName should be type string or symbol');
+	  assert$2.equal(typeof listener, 'function', 'nanobus.prependOnceListener: listener should be type function');
+
+	  var self = this;
+	  this.prependListener(eventName, once);
+	  function once () {
+	    listener.apply(self, arguments);
+	    self.removeListener(eventName, once);
+	  }
+	  return this
+	};
+
+	Nanobus.prototype.removeListener = function (eventName, listener) {
+	  assert$2.ok(typeof eventName === 'string' || typeof eventName === 'symbol', 'nanobus.removeListener: eventName should be type string or symbol');
+	  assert$2.equal(typeof listener, 'function', 'nanobus.removeListener: listener should be type function');
+
+	  if (eventName === '*') {
+	    this._starListeners = this._starListeners.slice();
+	    return remove(this._starListeners, listener)
+	  } else {
+	    if (typeof this._listeners[eventName] !== 'undefined') {
+	      this._listeners[eventName] = this._listeners[eventName].slice();
+	    }
+
+	    return remove(this._listeners[eventName], listener)
+	  }
+
+	  function remove (arr, listener) {
+	    if (!arr) return
+	    var index = arr.indexOf(listener);
+	    if (index !== -1) {
+	      removeArrayItems(arr, index, 1);
+	      return true
+	    }
+	  }
+	};
+
+	Nanobus.prototype.removeAllListeners = function (eventName) {
+	  if (eventName) {
+	    if (eventName === '*') {
+	      this._starListeners = [];
+	    } else {
+	      this._listeners[eventName] = [];
+	    }
+	  } else {
+	    this._starListeners = [];
+	    this._listeners = {};
+	  }
+	  return this
+	};
+
+	Nanobus.prototype.listeners = function (eventName) {
+	  var listeners = eventName !== '*'
+	    ? this._listeners[eventName]
+	    : this._starListeners;
+
+	  var ret = [];
+	  if (listeners) {
+	    var ilength = listeners.length;
+	    for (var i = 0; i < ilength; i++) ret.push(listeners[i]);
+	  }
+	  return ret
+	};
+
+	Nanobus.prototype._emit = function (arr, eventName, data, uuid) {
+	  if (typeof arr === 'undefined') return
+	  if (arr.length === 0) return
+	  if (data === undefined) {
+	    data = eventName;
+	    eventName = null;
+	  }
+
+	  if (eventName) {
+	    if (uuid !== undefined) {
+	      data = [eventName].concat(data, uuid);
+	    } else {
+	      data = [eventName].concat(data);
+	    }
+	  }
+
+	  var length = arr.length;
+	  for (var i = 0; i < length; i++) {
+	    var listener = arr[i];
+	    listener.apply(listener, data);
+	  }
+	};
+
+	var nanolru = LRU;
 
 	function LRU (opts) {
 	  if (!(this instanceof LRU)) return new LRU(opts)
@@ -3396,6 +4379,303 @@
 	LRU.prototype.evict = function () {
 	  if (!this.tail) return
 	  this.remove(this.tail);
+	};
+
+	var cache = ChooComponentCache;
+
+	function ChooComponentCache (state, emit, lru) {
+	  assert$2.ok(this instanceof ChooComponentCache, 'ChooComponentCache should be created with `new`');
+
+	  assert$2.equal(typeof state, 'object', 'ChooComponentCache: state should be type object');
+	  assert$2.equal(typeof emit, 'function', 'ChooComponentCache: emit should be type function');
+
+	  if (typeof lru === 'number') this.cache = new nanolru(lru);
+	  else this.cache = lru || new nanolru(100);
+	  this.state = state;
+	  this.emit = emit;
+	}
+
+	// Get & create component instances.
+	ChooComponentCache.prototype.render = function (Component, id) {
+	  assert$2.equal(typeof Component, 'function', 'ChooComponentCache.render: Component should be type function');
+	  assert$2.ok(typeof id === 'string' || typeof id === 'number', 'ChooComponentCache.render: id should be type string or type number');
+
+	  var el = this.cache.get(id);
+	  if (!el) {
+	    var args = [];
+	    for (var i = 2, len = arguments.length; i < len; i++) {
+	      args.push(arguments[i]);
+	    }
+	    args.unshift(Component, id, this.state, this.emit);
+	    el = newCall.apply(newCall, args);
+	    this.cache.set(id, el);
+	  }
+
+	  return el
+	};
+
+	// Because you can't call `new` and `.apply()` at the same time. This is a mad
+	// hack, but hey it works so we gonna go for it. Whoop.
+	function newCall (Cls) {
+	  return new (Cls.bind.apply(Cls, arguments)) // eslint-disable-line
+	}
+
+	var choo = Choo;
+
+	var HISTORY_OBJECT = {};
+
+	function Choo (opts) {
+	  if (!(this instanceof Choo)) return new Choo(opts)
+	  opts = opts || {};
+
+	  assert$2.equal(typeof opts, 'object', 'choo: opts should be type object');
+
+	  var self = this;
+
+	  // define events used by choo
+	  this._events = {
+	    DOMCONTENTLOADED: 'DOMContentLoaded',
+	    DOMTITLECHANGE: 'DOMTitleChange',
+	    REPLACESTATE: 'replaceState',
+	    PUSHSTATE: 'pushState',
+	    NAVIGATE: 'navigate',
+	    POPSTATE: 'popState',
+	    RENDER: 'render'
+	  };
+
+	  // properties for internal use only
+	  this._historyEnabled = opts.history === undefined ? true : opts.history;
+	  this._hrefEnabled = opts.href === undefined ? true : opts.href;
+	  this._hashEnabled = opts.hash === undefined ? true : opts.hash;
+	  this._hasWindow = typeof window !== 'undefined';
+	  this._cache = opts.cache;
+	  this._loaded = false;
+	  this._stores = [];
+	  this._tree = null;
+
+	  // state
+	  var _state = {
+	    events: this._events,
+	    components: {}
+	  };
+	  if (this._hasWindow) {
+	    this.state = window.initialState
+	      ? immutable(window.initialState, _state)
+	      : _state;
+	    delete window.initialState;
+	  } else {
+	    this.state = _state;
+	  }
+
+	  // properties that are part of the API
+	  this.router = nanorouter({ curry: true });
+	  this.emitter = nanobus('choo.emit');
+	  this.emit = this.emitter.emit.bind(this.emitter);
+
+	  // listen for title changes; available even when calling .toString()
+	  if (this._hasWindow) this.state.title = document.title;
+	  this.emitter.prependListener(this._events.DOMTITLECHANGE, function (title) {
+	    assert$2.equal(typeof title, 'string', 'events.DOMTitleChange: title should be type string');
+	    self.state.title = title;
+	    if (self._hasWindow) document.title = title;
+	  });
+	}
+
+	Choo.prototype.route = function (route, handler) {
+	  assert$2.equal(typeof route, 'string', 'choo.route: route should be type string');
+	  assert$2.equal(typeof handler, 'function', 'choo.handler: route should be type function');
+	  this.router.on(route, handler);
+	};
+
+	Choo.prototype.use = function (cb) {
+	  assert$2.equal(typeof cb, 'function', 'choo.use: cb should be type function');
+	  var self = this;
+	  this._stores.push(function (state) {
+	    var msg = 'choo.use';
+	    msg = cb.storeName ? msg + '(' + cb.storeName + ')' : msg;
+	    var endTiming = browser(msg);
+	    cb(state, self.emitter, self);
+	    endTiming();
+	  });
+	};
+
+	Choo.prototype.start = function () {
+	  assert$2.equal(typeof window, 'object', 'choo.start: window was not found. .start() must be called in a browser, use .toString() if running in Node');
+
+	  var self = this;
+	  if (this._historyEnabled) {
+	    this.emitter.prependListener(this._events.NAVIGATE, function () {
+	      self._matchRoute();
+	      if (self._loaded) {
+	        self.emitter.emit(self._events.RENDER);
+	        setTimeout(scrollToAnchor_1.bind(null, window.location.hash), 0);
+	      }
+	    });
+
+	    this.emitter.prependListener(this._events.POPSTATE, function () {
+	      self.emitter.emit(self._events.NAVIGATE);
+	    });
+
+	    this.emitter.prependListener(this._events.PUSHSTATE, function (href) {
+	      assert$2.equal(typeof href, 'string', 'events.pushState: href should be type string');
+	      window.history.pushState(HISTORY_OBJECT, null, href);
+	      self.emitter.emit(self._events.NAVIGATE);
+	    });
+
+	    this.emitter.prependListener(this._events.REPLACESTATE, function (href) {
+	      assert$2.equal(typeof href, 'string', 'events.replaceState: href should be type string');
+	      window.history.replaceState(HISTORY_OBJECT, null, href);
+	      self.emitter.emit(self._events.NAVIGATE);
+	    });
+
+	    window.onpopstate = function () {
+	      self.emitter.emit(self._events.POPSTATE);
+	    };
+
+	    if (self._hrefEnabled) {
+	      nanohref(function (location) {
+	        var href = location.href;
+	        var hash = location.hash;
+	        if (href === window.location.href) {
+	          if (!self._hashEnabled && hash) scrollToAnchor_1(hash);
+	          return
+	        }
+	        self.emitter.emit(self._events.PUSHSTATE, href);
+	      });
+	    }
+	  }
+
+	  this._setCache(this.state);
+	  this._stores.forEach(function (initStore) {
+	    initStore(self.state);
+	  });
+
+	  this._matchRoute();
+	  this._tree = this._prerender(this.state);
+	  assert$2.ok(this._tree, 'choo.start: no valid DOM node returned for location ' + this.state.href);
+
+	  this.emitter.prependListener(self._events.RENDER, nanoraf_1(function () {
+	    var renderTiming = browser('choo.render');
+	    var newTree = self._prerender(self.state);
+	    assert$2.ok(newTree, 'choo.render: no valid DOM node returned for location ' + self.state.href);
+
+	    assert$2.equal(self._tree.nodeName, newTree.nodeName, 'choo.render: The target node <' +
+	      self._tree.nodeName.toLowerCase() + '> is not the same type as the new node <' +
+	      newTree.nodeName.toLowerCase() + '>.');
+
+	    var morphTiming = browser('choo.morph');
+	    nanomorph_1(self._tree, newTree);
+	    morphTiming();
+
+	    renderTiming();
+	  }));
+
+	  documentReady(function () {
+	    self.emitter.emit(self._events.DOMCONTENTLOADED);
+	    self._loaded = true;
+	  });
+
+	  return this._tree
+	};
+
+	Choo.prototype.mount = function mount (selector) {
+	  if (typeof window !== 'object') {
+	    assert$2.ok(typeof selector === 'string', 'choo.mount: selector should be type String');
+	    this.selector = selector;
+	    return this
+	  }
+
+	  assert$2.ok(typeof selector === 'string' || typeof selector === 'object', 'choo.mount: selector should be type String or HTMLElement');
+
+	  var self = this;
+
+	  documentReady(function () {
+	    var renderTiming = browser('choo.render');
+	    var newTree = self.start();
+	    if (typeof selector === 'string') {
+	      self._tree = document.querySelector(selector);
+	    } else {
+	      self._tree = selector;
+	    }
+
+	    assert$2.ok(self._tree, 'choo.mount: could not query selector: ' + selector);
+	    assert$2.equal(self._tree.nodeName, newTree.nodeName, 'choo.mount: The target node <' +
+	      self._tree.nodeName.toLowerCase() + '> is not the same type as the new node <' +
+	      newTree.nodeName.toLowerCase() + '>.');
+
+	    var morphTiming = browser('choo.morph');
+	    nanomorph_1(self._tree, newTree);
+	    morphTiming();
+
+	    renderTiming();
+	  });
+	};
+
+	Choo.prototype.toString = function (location, state) {
+	  this.state = immutable(this.state, state || {});
+
+	  assert$2.notEqual(typeof window, 'object', 'choo.mount: window was found. .toString() must be called in Node, use .start() or .mount() if running in the browser');
+	  assert$2.equal(typeof location, 'string', 'choo.toString: location should be type string');
+	  assert$2.equal(typeof this.state, 'object', 'choo.toString: state should be type object');
+
+	  var self = this;
+	  this._setCache(this.state);
+	  this._stores.forEach(function (initStore) {
+	    initStore(self.state);
+	  });
+
+	  this._matchRoute(location);
+	  var html = this._prerender(this.state);
+	  assert$2.ok(html, 'choo.toString: no valid value returned for the route ' + location);
+	  assert$2(!Array.isArray(html), 'choo.toString: return value was an array for the route ' + location);
+	  return typeof html.outerHTML === 'string' ? html.outerHTML : html.toString()
+	};
+
+	Choo.prototype._matchRoute = function (locationOverride) {
+	  var location, queryString;
+	  if (locationOverride) {
+	    location = locationOverride.replace(/\?.+$/, '').replace(/\/$/, '');
+	    if (!this._hashEnabled) location = location.replace(/#.+$/, '');
+	    queryString = locationOverride;
+	  } else {
+	    location = window.location.pathname.replace(/\/$/, '');
+	    if (this._hashEnabled) location += window.location.hash.replace(/^#/, '/');
+	    queryString = window.location.search;
+	  }
+	  var matched = this.router.match(location);
+	  this._handler = matched.cb;
+	  this.state.href = location;
+	  this.state.query = browser$1(queryString);
+	  this.state.route = matched.route;
+	  this.state.params = matched.params;
+	  return this.state
+	};
+
+	Choo.prototype._prerender = function (state) {
+	  var routeTiming = browser("choo.prerender('" + state.route + "')");
+	  var res = this._handler(state, this.emit);
+	  routeTiming();
+	  return res
+	};
+
+	Choo.prototype._setCache = function (state) {
+	  var cache$1 = new cache(state, this.emitter.emit.bind(this.emitter), this._cache);
+	  state.cache = renderComponent;
+
+	  function renderComponent (Component, id) {
+	    assert$2.equal(typeof Component, 'function', 'choo.state.cache: Component should be type function');
+	    var args = [];
+	    for (var i = 0, len = arguments.length; i < len; i++) {
+	      args.push(arguments[i]);
+	    }
+	    return cache$1.render.apply(cache$1, args)
+	  }
+
+	  // When the state gets stringified, make sure `state.cache` isn't
+	  // stringified too.
+	  renderComponent.toJSON = function () {
+	    return null
+	  };
 	};
 
 	var hyperscriptAttributeToProperty = attributeToProperty;
@@ -3868,7 +5148,7 @@
 	  'indeterminate'
 	];
 
-	var browser = createCommonjsModule(function (module) {
+	var browser$2 = createCommonjsModule(function (module) {
 	// Props that need to be set directly rather than with el.setAttribute()
 
 
@@ -3970,7 +5250,48 @@
 	module.exports.default = module.exports;
 	module.exports.createElement = nanoHtmlCreateElement;
 	});
-	var browser_1 = browser.createElement;
+	var browser_1 = browser$2.createElement;
+
+	var html = browser$2;
+
+	// import builtins from 'rollup-plugin-node-builtins';
+	// import 'assert'
+
+	// var assert = require('assert')
+	var app = choo();
+
+
+	app.use(countStore);
+	app.route('/', mainView);
+	// app.mount('div id="test2"')
+	 
+	function mainView (state, emit) {
+	  return html`
+    <div id="test-t">
+      <h1>count is ${state.count}</h1>
+      <button onclick=${onclick}>Increment</button>
+    </div>
+  `
+
+	  function onclick () {
+	    emit('increment', 1);
+	  }
+	}
+
+	function countStore (state, emitter) {
+	    state.count = 0;
+	    emitter.on('increment', function (count) {
+	      state.count += count;
+	      emitter.emit('render');
+	    });
+	  }
+	  const tree = app.start();
+	  document.getElementById('test2').appendChild(tree);
+	  // document.body.appendChild(tree)
+	// app.mount('div')
+	// var main = function () {
+	  // return html`<div id="test">choo animals</div>`
+	// }
 
 	// Choo.route('/', main)
 	// Choo.mount('div id="test2"')
@@ -3993,8 +5314,7 @@
 	// }
 
 
-	console.log('test');
-	console.log('test2');
+	console.log('test23');
 	// if (!window.customElements.get('local-time')) {
 	    // console.log('registered')
 	    // window.CustomElement = CustomElement

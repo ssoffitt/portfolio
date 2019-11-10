@@ -9,7 +9,7 @@ import globals from 'rollup-plugin-node-globals';
 export default {
     input: './main.js',
     output: {
-        file: './dist/app.js',
+        file: './static/jsapp/app.js',
         format: 'iife',
         name: 'app',
         exports: 'none',
@@ -18,7 +18,7 @@ export default {
         },
     },
     plugins: [
-        css({ output: './dist/app.css' }),
+        css({ output: './static/jsapp/app.css' }),
         (process.env.node_env === 'prod' && terser()),
         resolve({
             browser: true,  // default: false
