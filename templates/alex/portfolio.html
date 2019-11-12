@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"/>
+
+    <base href="/">
+
+    <!-- <link type="text/css" rel="stylesheet" href="vendors/mini-default.min.css"/>-->
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link type="text/css" rel="stylesheet" href="{% static 'jsapp/app.css' %}"/>
+
+    <title>Portfolio</title>
+  </head>
+  <body width=100% style="background-color: #f0f0f0; font-family: 'Roboto', sans-serif;">
+        <!-- <nav> -->
+        <div width=100>
+        <div style="width:1160px; margin: 0 auto;">
+            <ul style="list-style: none; margin: 0; padding: 0;">
+                <img alt="logo-full" style="padding-right: 40px;" src="{% static 'img/logo-full.png' %}">
+                <li style="font-size: 14px; padding-top: 10px; font-size: 1em; padding-right: 40px; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; color: black; text-decoration: none;">ПОРТФОЛИО</a></li>
+                <li style="font-size: 14px; padding-right: 30px; padding-top: 10px; font-size: 1em;  display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">ОБО МНЕ</a></li>
+                <li style="font-size: 14px; padding-right: 30px; padding-top: 10px; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">УСЛУГИ</a></li>
+                <li style="font-size: 14px; padding-right: 30px; padding-top: 10px; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">ОТЗЫВЫ</a></li>
+                <li style="font-size: 14px; padding-right: 30px; padding-top: 10px; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">КЛИЕНТЫ</a></li>
+                <li style="font-size: 14px; padding-right: 40px; padding-top: 10px; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">КОНТАКТЫ</a></li>
+                <li style="color: #5996f9; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><img style="padding-right: 10px; margin-bottom: -7px;" alt="skype" src="{% static 'img/skype.png' %}"/>
+                    <a href="#" style="display: inline-block; padding: 10px; font-size: 18px; color: #4f90fa;">alexbutvina</a></li>
+            </ul>
+        </div>
+        <!-- </nav> -->
+        <script src="{% static 'jsapp/app.js' %}"></script>
+  </body>
+  <footer></footer>
+</html>

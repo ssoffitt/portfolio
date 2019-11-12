@@ -1,0 +1,4 @@
+.idea/
+virtualenv/
+jsapp/node_modules/
+.vscode/

@@ -1,0 +1,9 @@
+pip install Celery (django-celery==3.2.2)
+add celery.py to project
+add to settings: CELERY_BROKER_URL = 'amqp://localhost'
+run celery: celery -A portfolio worker -l info
+
+roboto menu 14 middle bold 
+
+50, 24 haeader, under haeader - text
+skype 18, 16 - button

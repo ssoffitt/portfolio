@@ -24,12 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'avz#j#987#48k*7l_86^yal2y79_1c*2(3e%m80gm^za^ddy0q'
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = 'avz#j#987#48k*7l_86^yal2y79_1c*2(3e%m80gm^za^ddy0q'
+# SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG=config('DJANGO_DEBUG')
+DEBUG = True
+# DEBUG=config('DJANGO_DEBUG')
 
 ALLOWED_HOSTS = ['vast-shore-40928.herokuapp.com', 'localhost']
 
@@ -42,6 +42,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djcelery',
+    'jsapp',
     'alex',
 )
 
@@ -87,16 +89,16 @@ DATABASES = {'default': {}}
 try:
     DATABASES = {
         'default': {
-            #'ENGINE': 'django.db.backends.postgresql',
-            'ENGINE': config('DB_ENGINE'),
-            'NAME': config('DB_NAME'),
-            'USER': config('DB_USER'),
-            'PASSWORD': config('DB_PASSWORD'),
-            'HOST': config('DB_HOST'),
-            #'NAME': 'portfolio',
-            #'USER': 'portfolio',
-            #'PASSWORD': '',
-            #'HOST': '127.0.0.1',
+            'ENGINE': 'django.db.backends.postgresql',
+            # 'ENGINE': config('DB_ENGINE'),
+            # 'NAME': config('DB_NAME'),
+            # 'USER': config('DB_USER'),
+            # 'PASSWORD': config('DB_PASSWORD'),
+            # 'HOST': config('DB_HOST'),
+            'NAME': 'portfolio',
+            'USER': 'portfolio',
+            'PASSWORD': '',
+            'HOST': 'localhost',
             'PORT': '5432',
         }
     
@@ -134,3 +136,38 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 STATICFILES_DIRS = (                                                           
     os.path.join(BASE_DIR, 'static'),                                          
 ) 
+
+EMAIL_USE_TLS = True
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' #for real email
+EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_PASSWORD = '81846f869b156ed152c0a8dcb7f307d1'
+# EMAIL_HOST_USER = 'asiwija@gmail.com'
+# EMAIL_DEBUG_MODE = True
+EMAIL_DEBUG_MODE = False
+EMAIL_PORT = 587
+# EMAIL_PORT = 465 
+EMAIL_HOST_USER = 'asiwija@gmail.com'
+EMAIL_HOST_PASSWORD = 'ufeueujsvxxtgxdd'
+GOOGLE_DRIVE_STORAGE_KEY_FILE = ''
+EMAIL_WEBHOOK_SENDGRID_KEY = 'test'
+# EMAIL_HOST_USER = 'gahtooh@gmail.com'
+# EMAIL_HOST_PASSWORD = '209c9b07a00507ebbb0002b361743a4d'
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = 'default@test.com'
+
+# TO_EMAIL = 'asiwija@gmail.com'
+#
+# TO_EMAIL = 'gahtooh@gmail.com'
+TO_EMAIL = 'asiwija@gmail.com'
+
+# For RabbitMQ
+CELERY_BROKER_URL = 'amqp://portfolio:portfolio@localhost:5672/portfolio'
+
+# CELERY_BROKER_URL = 'amqp://localhost'
+# CELERY_RESULT_BACKEND = 'amqp://localhost'
+# Celery Data Format
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'Asia/Kolkata'
