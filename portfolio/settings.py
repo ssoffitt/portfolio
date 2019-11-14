@@ -29,7 +29,11 @@ SECRET_KEY = 'avz#j#987#48k*7l_86^yal2y79_1c*2(3e%m80gm^za^ddy0q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-# DEBUG=config('DJANGO_DEBUG')
+DEBUG=config('DJANGO_DEBUG')
+
+DATABASE_URL = os.environ['DATABASE_URL']
+# conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+
 
 ALLOWED_HOSTS = ['vast-shore-40928.herokuapp.com', 'localhost']
 
@@ -104,7 +108,7 @@ try:
     
     }
 except UndefinedValueError:                                      
-    db_from_env = dj_database_url.config()                       
+    db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)                       
     DATABASES['default'].update(db_from_env) 
 
 
