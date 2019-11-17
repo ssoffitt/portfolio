@@ -11,7 +11,7 @@
             border-color: #34a759 !important;
             color: white !important;
         }
-    button#order-design:hover {
+        button#order-design:hover {
             background-color: #15943d !important;
             border-color: #15943d !important;
             color: white !important;
@@ -20,6 +20,11 @@
             background-color:rgba(214, 29, 29, 0.4) !important; 
             opacity: 0.5 !important;
             z-index: -1
+        }
+    div#block-4 a:hover {
+            background-color: #15943d !important;
+            border-color: #15943d !important;
+            color: white !important;
         }
     </style>
 
@@ -33,7 +38,7 @@
   </head>
   <body width=100% style="background-color: #f2f2f2; font-family: 'Roboto', sans-serif;">
         <!-- <nav> -->
-        <div width=100>
+        <div width=100% style="background-color: #f2f2f2">
         <div style="width:1160px; margin: 0 auto;">
             <ul style="list-style: none; margin: 0; padding: 0;">
                 <img alt="logo-full" style="padding-right: 40px;" src="{% static 'img/logo-full.png' %}">
@@ -62,6 +67,9 @@
                     <div></div>
                 </div>
             </div>
+        </div>
+        <div>
+        <div style="height: 100%; width: 1160px; margin: 0 auto;" >
             <div id="block-2" style="width: 100%; height: 400px;float: left;">
                 <p style="font-size: 50px; text-align: center; margin-bottom: 15px; margin-top: 100px;">ПОРТФОЛИО</p>
                 <p style="font-size: 24px; text-align: center; margin-bottom: 50px;">Более 200 проектов за 10 лет работы</p>
@@ -71,18 +79,32 @@
                 <button style="width: 250px; height: 60px; background-color: #f2f2f2; border-radius: 30px; border-color: #287fe0; color: #287fe0; font-size: 16px; text-transform: none;;">Корпоративные сайты</button>
                 
             </div>
-            <div  id="block-2" style="width: 100%; height: 750px;float: left; overflow: hidden;">
+        </div>
+            <div  id="block-3" style="width: 1900px; height: 750px;float: left; overflow: hidden;">
                 <div style="height: 250px;"><img src="{% static 'img/block1.png' %}" />
-                <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center; margin-top: -270px;">ДОН КОФЕ</h3>
-                <p style="mix-blend-mode: color-dodge; color: white; text-align: center;">Разработка дизайна сайта посвященного кофе <br>
-                    с интерет-магазином продажи продукции</p></div>
+                    <div style="background-color: black; z-index: 1; opacity: 0.3; width: 100%; height: 250px; margin-top: -503px !important;position: absolute; right: 0;">
+                    </div>
+                    <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center; margin-top: -430px; z-index: 100; position: relative;">ДОН КОФЕ</h3>
+                    <p style="mix-blend-mode: color-dodge; color: white; text-align: center; z-index: 100; position: relative;">Разработка дизайна сайта посвященного кофе <br>
+                        с интерет-магазином продажи продукции</p>
+                </div>
                 <div style="height: 250px;"><img src="{% static 'img/block3.png' %}" />
-                <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center;">МЕТРОПОЛЬ</h3>
-                <p style="mix-blend-mode: color-dodge; color: white; text-align: center;">Разработка дизайна сайта для жилого дома</p></div>
+<div style="background-color: black; z-index: 1; opacity: 0.3; width: 100%; height: 250px; margin-top: -494px !important;position: absolute; right: 0;">
+                    </div>
+
+                <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center; margin-top: -404px; z-index: 100; position: relative;">МЕТРОПОЛЬ</h3>
+                <p style="mix-blend-mode: color-dodge; color: white; text-align: center; z-index: 100; position: relative;">Разработка дизайна сайта для жилого дома</p></div>
                 <div style="height: 250px;"><img src="{% static 'img/block2.png' %}" />
-                <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center;">ЛИНИЯ ЗАКОНА</h3>
-                <p style="mix-blend-mode: color-dodge; color: white; text-align: center;">Разработка дизайна сайта юридических услуг</p></div>
+<div style="background-color: black; z-index: 1; opacity: 0.3; width: 100%; height: 250px; margin-top: -509px !important;position: absolute; right: 0;">
+                    </div>
+
+
+                <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center; margin-top: -420px; z-index: 100; position: relative;">ЛИНИЯ ЗАКОНА</h3>
+                <p style="mix-blend-mode: color-dodge; color: white; text-align: center; z-index: 100; position: relative;">Разработка дизайна сайта юридических услуг</p></div>
             </div>
+            <div style="float: left; display: flex; justify-content: center; width: 100%;  height:170px; align-items: center;" id="block-4">
+                <a style="height: 100px; width:100px; background-color: #34a759; background-image: url('static/img/plus.png'); background-position: center; background-repeat: no-repeat; border-color: #34a759; border-radius: 60px;" href="#">
+                </a></div>
             </div>
             </div>
             <div style="float: clean;">Cлайдер
