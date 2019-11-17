@@ -64,6 +64,7 @@ function countStore (state, emitter) {
 
 
 console.log('test23');
+console.log('test30');
 // if (!window.customElements.get('local-time')) {
     // console.log('registered')
     // window.CustomElement = CustomElement
