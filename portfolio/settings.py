@@ -31,10 +31,6 @@ SECRET_KEY = 'avz#j#987#48k*7l_86^yal2y79_1c*2(3e%m80gm^za^ddy0q'
 DEBUG = True
 # DEBUG=config('DJANGO_DEBUG')
 
-# DATABASE_URL = os.environ['DATABASE_URL']
-# conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-
-
 ALLOWED_HOSTS = ['vast-shore-40928.herokuapp.com', 'localhost']
 
 # Application definition
@@ -94,15 +90,15 @@ try:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'ENGINE': config('DB_ENGINE'),
-            'NAME': config('DB_NAME'),
-            'USER': config('DB_USER'),
-            'PASSWORD': config('DB_PASSWORD'),
-            'HOST': config('DB_HOST'),
-            # 'NAME': 'portfolio',
-            # 'USER': 'portfolio',
-            # 'PASSWORD': '',
-            # 'HOST': 'localhost',
+            # 'ENGINE': config('DB_ENGINE'),
+            # 'NAME': config('DB_NAME'),
+            # 'USER': config('DB_USER'),
+            # 'PASSWORD': config('DB_PASSWORD'),
+            # 'HOST': config('DB_HOST'),
+            'NAME': 'portfolio',
+            'USER': 'portfolio',
+            'PASSWORD': '',
+            'HOST': 'localhost',
             'PORT': '5432',
         }
     
