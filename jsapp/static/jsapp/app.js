@@ -5315,6 +5315,7 @@
 
 
 	console.log('test23');
+	console.log('test18');
 	// if (!window.customElements.get('local-time')) {
 	    // console.log('registered')
 	    // window.CustomElement = CustomElement
