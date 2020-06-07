@@ -17,3 +17,15 @@ class Attachments(models.Model):
 
     def __str__(self):
         return '<Attachment id:%s name:%s >' % (self.id, self.name)
+
+
+class Feedback(models.Model):
+    name = models.CharField(max_length=255)
+    photo = models.ImageField(upload_to='feedback/', null=True)
+    comment = models.TextField()
+
+    class Meta:
+        db_table = 'feedback'
+
+    def __str__(self):
+        return '<Feedback id:%s name:%s>' % (self.id, self.name)
