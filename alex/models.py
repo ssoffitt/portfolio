@@ -29,3 +29,15 @@ class Feedback(models.Model):
 
     def __str__(self):
         return '<Feedback id:%s name:%s>' % (self.id, self.name)
+
+
+class Client(models.Model):
+    name = models.CharField(max_length=255),
+    url = models.CharField(max_length=2048, null=True, blank=True)
+    attach = models.FileField(upload_to='clients/', null=True)
+
+    class Meta:
+        db_table = 'client'
+    
+    def __str__(self):
+        return '<Client id: %s>' % self.id
