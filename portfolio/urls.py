@@ -19,7 +19,7 @@ from django.conf import settings
 
 urlpatterns = [
     url(r'^media/(.*)$', static.serve, {'document_root': settings.MEDIA_ROOT}),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     #url(r'^alex/', include('alex.urls')),
     url(r'', include('alex.urls')),
 ]
