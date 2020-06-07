@@ -3,7 +3,12 @@ add celery.py to project
 add to settings: CELERY_BROKER_URL = 'amqp://localhost'
 run celery: celery -A portfolio worker -l info
 
-roboto menu 14 middle bold 
+#build docker
+docker-compose build
+docker-compose build <app> eg.jsapp, web
+#stop and rerun docker
+docker-compose down -v
+docker compose up --remove-orphans
 
-50, 24 haeader, under haeader - text
-skype 18, 16 - button
+#stop postrgres
+systemctl stop postgresql (also can run with version, eg. postresql9.6)

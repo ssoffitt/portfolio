@@ -29,9 +29,9 @@ SECRET_KEY = 'avz#j#987#48k*7l_86^yal2y79_1c*2(3e%m80gm^za^ddy0q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-DEBUG=config('DJANGO_DEBUG')
+# DEBUG=config('DJANGO_DEBUG')
 
-DATABASE_URL = os.environ['DATABASE_URL']
+# DATABASE_URL = os.environ['DATABASE_URL']
 # conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 
