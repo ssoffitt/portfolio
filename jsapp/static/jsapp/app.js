@@ -5285,8 +5285,8 @@
 	      emitter.emit('render');
 	    });
 	  }
-	  const tree = app.start();
-	  document.getElementById('test2').appendChild(tree);
+	  // const tree = app.start()
+	  // document.getElementById('test2').appendChild(tree)
 	  // document.body.appendChild(tree)
 	// app.mount('div')
 	// var main = function () {
@@ -5315,7 +5315,11 @@
 
 
 	console.log('test23');
+<<<<<<< HEAD
 	console.log('test18');
+=======
+	console.log('test30');
+>>>>>>> master
 	// if (!window.customElements.get('local-time')) {
 	    // console.log('registered')
 	    // window.CustomElement = CustomElement

@@ -94,21 +94,21 @@ try:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            # 'ENGINE': config('DB_ENGINE'),
-            # 'NAME': config('DB_NAME'),
-            # 'USER': config('DB_USER'),
-            # 'PASSWORD': config('DB_PASSWORD'),
-            # 'HOST': config('DB_HOST'),
-            'NAME': 'portfolio',
-            'USER': 'portfolio',
-            'PASSWORD': '',
-            'HOST': 'localhost',
+            'ENGINE': config('DB_ENGINE'),
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            # 'NAME': 'portfolio',
+            # 'USER': 'portfolio',
+            # 'PASSWORD': '',
+            # 'HOST': 'localhost',
             'PORT': '5432',
         }
     
     }
 except UndefinedValueError:                                      
-    db_from_env = dj_database_url.config()                       
+    db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)                       
     DATABASES['default'].update(db_from_env) 
 
 

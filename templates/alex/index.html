@@ -11,7 +11,7 @@
             border-color: #34a759 !important;
             color: white !important;
         }
-    button#order-design:hover {
+        button#order-design:hover {
             background-color: #15943d !important;
             border-color: #15943d !important;
             color: white !important;
@@ -20,6 +20,11 @@
             background-color:rgba(214, 29, 29, 0.4) !important; 
             opacity: 0.5 !important;
             z-index: -1
+        }
+    div#block-4 a:hover {
+            background-color: #15943d !important;
+            border-color: #15943d !important;
+            color: white !important;
         }
     </style>
 
@@ -31,61 +36,77 @@
 
     <title>Main page</title>
   </head>
-  <body width=100% style="background-color: #f2f2f2; font-family: 'Roboto', sans-serif;">
+  <body width=100% style="font-family: 'Roboto', sans-serif;">
         <!-- <nav> -->
-        <div width=100>
-        <div style="width:1160px; margin: 0 auto;">
-            <ul style="list-style: none; margin: 0; padding: 0;">
-                <img alt="logo-full" style="padding-right: 40px;" src="{% static 'img/logo-full.png' %}">
-                <li style="font-size: 14px; padding-top: 10px; font-size: 1em; padding-right: 40px; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; color: black; text-decoration: none;">ПОРТФОЛИО</a></li>
-                <li style="font-size: 14px; padding-right: 30px; padding-top: 10px; font-size: 1em;  display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">ОБО МНЕ</a></li>
-                <li style="font-size: 14px; padding-right: 30px; padding-top: 10px; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">УСЛУГИ</a></li>
-                <li style="font-size: 14px; padding-right: 30px; padding-top: 10px; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">ОТЗЫВЫ</a></li>
-                <li style="font-size: 14px; padding-right: 30px; padding-top: 10px; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">КЛИЕНТЫ</a></li>
-                <li style="font-size: 14px; padding-right: 40px; padding-top: 10px; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">КОНТАКТЫ</a></li>
-                <li style="color: #5996f9; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><img style="padding-right: 10px; margin-bottom: -7px;" alt="skype" src="{% static 'img/skype.png' %}"/>
-                    <a href="#" style="display: inline-block; padding: 10px; font-size: 18px; color: #4f90fa;">alexbutvina</a></li>
-            </ul>
-        </div>
-        <!-- </nav> -->
-        <div style="height: 100%; width: 1160px; margin: 0 auto;" id="container">
-            <!-- //height:560px; -->
-            <div id="block-1" style="margin-top: 150px; width: 100%; height: 620px;float: left; background-image: url('static/img/table3.png'); background-repeat: no-repeat; background-position-y: bottom;
-            background-position-x: right;">
-                <div style="width: 50%; "><p style="font-size: 50px;">Разработка дизайна сайтов</p>
-                    <p style="font-size: 24px;">Закажите создание дизайна своего сайта, посадочной страницы, интернет-магазина или сервиса у профессионального веб-дизайнера</p>
-                    <button style="width: 250px; height: 60px; background-color: #f2f2f2; border-radius: 30px; border-color: #287fe0; color: #287fe0; font-size: 16px; text-transform: none;">Узнать подробнее</button>
-                    <button id="order-design" style="width: 250px; height: 60px; border-radius: 30px; background-image: url(static/img/telegram.png); background-position: 92% 50%; background-repeat: no-repeat; background-color: #34a759; border-color: #34a759; margin-left: 30px; font-size: 16px; text-transform: none;">Заказать дизайн</button>
-                </div>
-                <div style="width: 50%; float: right; margin-top: -335px; margin-right: 30px;">
-                    <div style="text-align: center; margin-left: -25px;"><img src="{% static 'img/300project.png' %}"></div>
-                    <div></div>
+        <div width=100%  style="background-color: #f1f1f1; height: 860px;">
+            <div style="width:1160px; margin: 0 auto;">
+                <ul style="list-style: none; margin: 0; padding: 0;">
+                    <img alt="logo-full" style="padding-right: 40px;" src="{% static 'img/logo-full.png' %}">
+                    <li style="font-size: 14px; padding-top: 10px; font-size: 1em; padding-right: 40px; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; color: black; text-decoration: none;">ПОРТФОЛИО</a></li>
+                    <li style="font-size: 14px; padding-right: 30px; padding-top: 10px; font-size: 1em;  display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">ОБО МНЕ</a></li>
+                    <li style="font-size: 14px; padding-right: 30px; padding-top: 10px; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">УСЛУГИ</a></li>
+                    <li style="font-size: 14px; padding-right: 30px; padding-top: 10px; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">ОТЗЫВЫ</a></li>
+                    <li style="font-size: 14px; padding-right: 30px; padding-top: 10px; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">КЛИЕНТЫ</a></li>
+                    <li style="font-size: 14px; padding-right: 40px; padding-top: 10px; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><a href="#" style="display: inline-block; text-decoration: none; color: black;">КОНТАКТЫ</a></li>
+                    <li style="color: #5996f9; font-size: 1em; display: inline; line-height: 70px; vertical-align: text-bottom;"><img style="padding-right: 10px; margin-bottom: -7px;" alt="skype" src="{% static 'img/skype.png' %}"/>
+                        <a href="#" style="display: inline-block; padding: 10px; font-size: 18px; color: #4f90fa;">alexbutvina</a></li>
+                </ul>
+            </div>
+            <!-- </nav> -->
+            <div style="height: 100%; width: 1160px; margin: 0 auto;" id="container">
+                <!-- //height:560px; -->
+                <div id="block-1" style="margin-top: 150px; width: 100%; height: 620px;float: left; background-image: url('static/img/table3.png'); background-repeat: no-repeat; background-position-y: bottom;
+                background-position-x: right;">
+                    <div style="width: 50%; "><p style="font-size: 50px;">Разработка дизайна сайтов</p>
+                        <p style="font-size: 24px;">Закажите создание дизайна своего сайта, посадочной страницы, интернет-магазина или сервиса у профессионального веб-дизайнера</p>
+                        <button style="width: 250px; height: 60px; background-color: #f1f1f1; border-radius: 30px; border-color: #287fe0; color: #287fe0; font-size: 16px; text-transform: none;">Узнать подробнее</button>
+                        <button id="order-design" style="width: 250px; height: 60px; border-radius: 30px; background-image: url(static/img/telegram.png); background-position: 92% 50%; background-repeat: no-repeat; background-color: #34a759; border-color: #34a759; margin-left: 30px; font-size: 16px; text-transform: none;">Заказать дизайн</button>
+                    </div>
+                    <div style="width: 50%; float: right; margin-top: -335px; margin-right: 30px;">
+                        <div style="text-align: center; margin-left: -25px;"><img src="{% static 'img/300project.png' %}"></div>
+                        <div></div>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div style="height: 100%; width: 1160px; margin: 0 auto;" >
             <div id="block-2" style="width: 100%; height: 400px;float: left;">
                 <p style="font-size: 50px; text-align: center; margin-bottom: 15px; margin-top: 100px;">ПОРТФОЛИО</p>
                 <p style="font-size: 24px; text-align: center; margin-bottom: 50px;">Более 200 проектов за 10 лет работы</p>
-                <button style="width: 250px; height: 60px; border-radius: 30px; background-color: #f2f2f2; border-color: #287fe0; color: #287fe0; margin-left: 30px; font-size: 16px; text-transform: none; margin-left: 0px; margin-right: 40px;">Все проекты</button>
-                <button style="width: 250px; height: 60px; background-color: #f2f2f2; border-radius: 30px; border-color: #287fe0; color: #287fe0; font-size: 16px; text-transform: none; margin-right: 40px;">Landing pages</button>
-                <button style="width: 250px; height: 60px; background-color: #f2f2f2; border-radius: 30px; border-color: #287fe0; color: #287fe0; font-size: 16px; text-transform: none; margin-right: 40px;">Интернет-магазины</button>
-                <button style="width: 250px; height: 60px; background-color: #f2f2f2; border-radius: 30px; border-color: #287fe0; color: #287fe0; font-size: 16px; text-transform: none;;">Корпоративные сайты</button>
+                <button style="width: 250px; height: 60px; border-radius: 30px; background-color: white; border-color: #287fe0; color: #287fe0; margin-left: 30px; font-size: 16px; text-transform: none; margin-left: 0px; margin-right: 40px;">Все проекты</button>
+                <button style="width: 250px; height: 60px; background-color: white; border-radius: 30px; border-color: #287fe0; color: #287fe0; font-size: 16px; text-transform: none; margin-right: 40px;">Landing pages</button>
+                <button style="width: 250px; height: 60px; background-color: white; border-radius: 30px; border-color: #287fe0; color: #287fe0; font-size: 16px; text-transform: none; margin-right: 40px;">Интернет-магазины</button>
+                <button style="width: 250px; height: 60px; background-color: white; border-radius: 30px; border-color: #287fe0; color: #287fe0; font-size: 16px; text-transform: none;;">Корпоративные сайты</button>
                 
             </div>
-            <div  id="block-2" style="width: 100%; height: 750px;float: left; overflow: hidden;">
+        </div>
+            <div  id="block-3" style="width: 1900px; height: 750px;float: left; overflow: hidden;">
                 <div style="height: 250px;"><img src="{% static 'img/block1.png' %}" />
-                <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center; margin-top: -270px;">ДОН КОФЕ</h3>
-                <p style="mix-blend-mode: color-dodge; color: white; text-align: center;">Разработка дизайна сайта посвященного кофе <br>
-                    с интерет-магазином продажи продукции</p></div>
+                    <div style="background-color: black; z-index: 1; opacity: 0.3; width: 100%; height: 250px; margin-top: -503px !important;position: absolute; right: 0;">
+                    </div>
+                    <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center; margin-top: -430px; z-index: 100; position: relative;">ДОН КОФЕ</h3>
+                    <p style="mix-blend-mode: color-dodge; color: white; text-align: center; z-index: 100; position: relative;">Разработка дизайна сайта посвященного кофе <br>
+                        с интерет-магазином продажи продукции</p>
+                </div>
                 <div style="height: 250px;"><img src="{% static 'img/block3.png' %}" />
-                <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center;">МЕТРОПОЛЬ</h3>
-                <p style="mix-blend-mode: color-dodge; color: white; text-align: center;">Разработка дизайна сайта для жилого дома</p></div>
+<div style="background-color: black; z-index: 1; opacity: 0.3; width: 100%; height: 250px; margin-top: -494px !important;position: absolute; right: 0;">
+                    </div>
+
+                <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center; margin-top: -404px; z-index: 100; position: relative;">МЕТРОПОЛЬ</h3>
+                <p style="mix-blend-mode: color-dodge; color: white; text-align: center; z-index: 100; position: relative;">Разработка дизайна сайта для жилого дома</p></div>
                 <div style="height: 250px;"><img src="{% static 'img/block2.png' %}" />
-                <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center;">ЛИНИЯ ЗАКОНА</h3>
-                <p style="mix-blend-mode: color-dodge; color: white; text-align: center;">Разработка дизайна сайта юридических услуг</p></div>
+<div style="background-color: black; z-index: 1; opacity: 0.3; width: 100%; height: 250px; margin-top: -509px !important;position: absolute; right: 0;">
+                    </div>
+
+
+                <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center; margin-top: -420px; z-index: 100; position: relative;">ЛИНИЯ ЗАКОНА</h3>
+                <p style="mix-blend-mode: color-dodge; color: white; text-align: center; z-index: 100; position: relative;">Разработка дизайна сайта юридических услуг</p></div>
             </div>
+            <div style="float: left; display: flex; justify-content: center; width: 100%;  height:170px; align-items: center;" id="block-4">
+                <a style="height: 100px; width:100px; background-color: #34a759; background-image: url('static/img/plus.png'); background-position: center; background-repeat: no-repeat; border-color: #34a759; border-radius: 60px;" href="#">
+                </a></div>
             </div>
-            </div>
-            <div style="float: clean;">Cлайдер
+            <!-- <div style="float: clean;">Cлайдер
                 <p>Ttile</p>
                 <button>Button</button>
             </div>
@@ -131,7 +152,7 @@
                     <button type="submit">Send email</button>
                 </form>
             </div>
-            <div id="test2">test</div>
+            <div id="test2">test</div> -->
         </div>  
         <script src="{% static 'jsapp/app.js' %}"></script>
   </body>
