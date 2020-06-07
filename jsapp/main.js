@@ -34,8 +34,8 @@ function countStore (state, emitter) {
       emitter.emit('render')
     })
   }
-  const tree = app.start()
-  document.getElementById('test2').appendChild(tree)
+  // const tree = app.start()
+  // document.getElementById('test2').appendChild(tree)
   // document.body.appendChild(tree)
 // app.mount('div')
 // var main = function () {
