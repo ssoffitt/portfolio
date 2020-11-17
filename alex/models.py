@@ -27,7 +27,7 @@ class Attachments(models.Model):
     description = models.TextField(null=True, blank=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     type = models.CharField(max_length=5, choices=TYPES, default='image')
-    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE)
+    project = models.ForeignKey('alex.Project', null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'attachments'
@@ -37,9 +37,9 @@ class Attachments(models.Model):
 
 
 class Client(models.Model):
-    name = models.CharField(max_length=255),
+    name = models.CharField(max_length=255)
     url = models.CharField(max_length=2048, null=True, blank=True)
-    attach = models.FileField(upload_to='clients/', null=True)
+    attach = models.FileField(upload_to='clients/', null=True, blank=True)
 
     class Meta:
         db_table = 'client'
@@ -50,9 +50,9 @@ class Client(models.Model):
 
 class Feedback(models.Model):
     name = models.CharField(max_length=255)
-    photo = models.ImageField(upload_to='feedback/', null=True)
+    photo = models.ImageField(upload_to='feedback/', null=True, blank=True)
     comment = models.TextField()
-    client = models.ForeignKey(Client, null=True, on_delete=models.CASCADE)
+    client = models.ForeignKey('alex.Client', blank=True, null=True, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'feedback'
