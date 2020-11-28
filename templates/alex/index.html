@@ -81,20 +81,20 @@
             </div>
         </div>
             <div  id="block-3" style="width: 1900px; height: 750px;float: left; overflow: hidden;">
-                <div style="height: 250px;"><img src="{% static 'img/block1.png' %}" />
+                <div style="height: 250px; overflow: hidden;"><img class="image-parallax" src="{% static 'img/block1.png' %}" />
                     <div style="background-color: black; z-index: 1; opacity: 0.3; width: 100%; height: 250px; margin-top: -503px !important;position: absolute; right: 0;">
                     </div>
                     <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center; margin-top: -430px; z-index: 100; position: relative;">ДОН КОФЕ</h3>
                     <p style="mix-blend-mode: color-dodge; color: white; text-align: center; z-index: 100; position: relative;">Разработка дизайна сайта посвященного кофе <br>
                         с интерет-магазином продажи продукции</p>
                 </div>
-                <div style="height: 250px;"><img src="{% static 'img/block3.png' %}" />
+                <div style="height: 250px; overflow: hidden:"><img class="image-parallax" src="{% static 'img/block3.png' %}" />
 <div style="background-color: black; z-index: 1; opacity: 0.3; width: 100%; height: 250px; margin-top: -494px !important;position: absolute; right: 0;">
                     </div>
 
                 <h3 style="mix-blend-mode: color-dodge; font-weight: bold; color: white; text-align: center; margin-top: -404px; z-index: 100; position: relative;">МЕТРОПОЛЬ</h3>
                 <p style="mix-blend-mode: color-dodge; color: white; text-align: center; z-index: 100; position: relative;">Разработка дизайна сайта для жилого дома</p></div>
-                <div style="height: 250px;"><img src="{% static 'img/block2.png' %}" />
+                <div style="height: 250px; overflow: hidden:"><img class="image-parallax" src="{% static 'img/block2.png' %}" />
 <div style="background-color: black; z-index: 1; opacity: 0.3; width: 100%; height: 250px; margin-top: -509px !important;position: absolute; right: 0;">
                     </div>
 
@@ -154,7 +154,12 @@
             </div>
             <div id="test2">test</div> -->
         </div>  
+        {% comment %} <script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.5.1/dist/simpleParallax.min.js"></script> {% endcomment %}
         <script src="{% static 'jsapp/app.js' %}"></script>
+        {% comment %} <script> {% endcomment %}
+            {% comment %} var image = document.getElementsByClassName('image1'); {% endcomment %}
+            {% comment %} new simpleParallax(image); {% endcomment %}
+        {% comment %} </script> {% endcomment %}
   </body>
   <footer></footer>
 </html>

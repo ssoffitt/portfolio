@@ -3,6 +3,7 @@ import 'milligram/dist/milligram.min.css'
 import choo from 'choo'
 import html from 'choo/html'
 import './app.css'
+import './simpleParallax.min.js'
 // import builtins from 'rollup-plugin-node-builtins';
 // import 'assert'
 
@@ -34,7 +35,7 @@ function countStore (state, emitter) {
       emitter.emit('render')
     })
   }
-  // const tree = app.start()
+  const tree = app.start()
   // document.getElementById('test2').appendChild(tree)
   // document.body.appendChild(tree)
 // app.mount('div')
@@ -64,7 +65,13 @@ function countStore (state, emitter) {
 
 
 console.log('test23');
+<<<<<<< Updated upstream
 console.log('test30');
+=======
+var image = document.getElementsByClassName('image-parallax');
+new simpleParallax(image);
+
+>>>>>>> Stashed changes
 // if (!window.customElements.get('local-time')) {
     // console.log('registered')
     // window.CustomElement = CustomElement

@@ -97,7 +97,7 @@ try:
             # 'HOST': config('DB_HOST'),
             'NAME': 'portfolio',
             'USER': 'portfolio',
-            'PASSWORD': '',
+            # 'PASSWORD': '',
             'HOST': 'localhost',
             'PORT': '5432',
         }
