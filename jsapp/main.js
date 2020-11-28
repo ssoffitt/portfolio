@@ -65,13 +65,9 @@ function countStore (state, emitter) {
 
 
 console.log('test23');
-<<<<<<< Updated upstream
 console.log('test30');
-=======
 var image = document.getElementsByClassName('image-parallax');
 new simpleParallax(image);
-
->>>>>>> Stashed changes
 // if (!window.customElements.get('local-time')) {
     // console.log('registered')
     // window.CustomElement = CustomElement
