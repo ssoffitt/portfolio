@@ -47,7 +47,7 @@ INSTALLED_APPS = (
     'alex',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -97,7 +97,7 @@ try:
             # 'HOST': config('DB_HOST'),
             'NAME': 'portfolio',
             'USER': 'portfolio',
-            # 'PASSWORD': '',
+            'PASSWORD': '',
             'HOST': 'localhost',
             'PORT': '5432',
         }
