@@ -4,3 +4,4 @@ jsapp/node_modules/
 .vscode/
 *.pyc
 local.py
+media/
