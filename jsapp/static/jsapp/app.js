@@ -5323,9 +5323,9 @@
 
 
 	console.log('test23');
+	console.log('test30');
 	var image = document.getElementsByClassName('image-parallax');
 	new simpleParallax(image);
-
 	// if (!window.customElements.get('local-time')) {
 	    // console.log('registered')
 	    // window.CustomElement = CustomElement
