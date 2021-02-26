@@ -1,4 +1,4 @@
-aiohttp==2.1.0
+aiohttp==3.7.4
 aiohttp-mako==0.3.0
 aiopg==0.13.0
 certifi==2018.1.18
